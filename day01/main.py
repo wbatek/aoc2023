@@ -54,7 +54,6 @@ def check(line: str) -> (int, int):
             break
         matches.append((match.group(0), match.start()))
         start = match.start() + 1
-    print(matches)
     first, last = get_digits(line)
 
     if len(matches) == 0:
