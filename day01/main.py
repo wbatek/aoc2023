@@ -68,8 +68,8 @@ def check(line: str) -> (int, int):
 
 if __name__ == "__main__":
     input_path = "input.txt"
-    f = open("output1.txt", "w")
-    f.write(part_one(input_path))
+    with open("output1.txt", "w") as f:
+        f.write(part_one(input_path))
 
-    f = open("output2.txt", "w")
-    f.write(part_two(input_path))
+    with open("output2.txt", "w") as f:
+        f.write(part_two(input_path))
