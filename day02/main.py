@@ -27,21 +27,17 @@ def parse_line(line: str) -> list:
 
 
 def get_colors(line: str) -> tuple:
-    print('new line')
     line = line.replace(',', '').replace('\n', '')
-    subgames = line.split(";")
-    print(subgames)
     (max_green, max_blue, max_red) = 0, 0, 0
-    for subgame in subgames:
+    for subgame in line.split(";"):
         data = subgame.split(" ")
-        for color in data[2::2]:
+        for color in data:
             if color == "green":
                 max_green = max(int(max_green), int(data[data.index(color) - 1]))
             elif color == "blue":
                 max_blue = max(int(max_blue), int(data[data.index(color) - 1]))
             elif color == "red":
                 max_red = max(int(max_red), int(data[data.index(color) - 1]))
-    print(max_green, max_blue, max_red)
     return int(max_green), int(max_blue), int(max_red)
 
 
