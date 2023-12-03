@@ -49,11 +49,7 @@ def find_numbers_surrounding(lines: list, i: int, gear_index: int):
         if number[2] == gear_index - 1 or number[1] == gear_index + 1 or number[1] <= gear_index <= number[2]:
             surrounding_numbers.append(number)
             if len(surrounding_numbers) == 2:
-                break
-
-    if len(surrounding_numbers) == 2:
-        print(surrounding_numbers[0][0], surrounding_numbers[1][0])
-        return surrounding_numbers[0][0] * surrounding_numbers[1][0]
+                return surrounding_numbers[0][0] * surrounding_numbers[1][0]
     return 0
 
 
