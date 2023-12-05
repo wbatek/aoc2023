@@ -1,5 +1,4 @@
 START_IDX = [3, 30, 41, 76, 124, 161, 183]
-# START_IDX = [3, 7, 12, 18, 22, 27, 31]
 NUMBER_OF_MAPS = 7
 
 
@@ -10,7 +9,6 @@ def part_one(filename: str) -> str:
     seed_to_location = {seed: seed for seed in seeds}
     for i in range(NUMBER_OF_MAPS):
         update_values(seeds, seed_to_location, data, START_IDX[i])
-        print(seed_to_location)
 
     return str(min(seed_to_location.values()))
 
@@ -18,26 +16,12 @@ def part_one(filename: str) -> str:
 def part_two(filename: str) -> str:
     with open(filename) as file:
         data = [line.strip() for line in file.readlines()]
-    seed_ranges = data[0].split(": ")[1].split(" ")
-    seeds = set()
-    for i in range(0, len(seed_ranges), 2):
-        pair = seed_ranges[i:i + 2]
-        for j in range(int(pair[1])):
-            print(int(pair[0])+j)
-            seeds.add(int(pair[0]) + j)
-    seeds = list(seeds)
-
-    seed_to_location = {seed: seed for seed in seeds}
-    for i in range(NUMBER_OF_MAPS):
-        update_values(seeds, seed_to_location, data, START_IDX[i])
-        print(seed_to_location)
-
-    return str(min(seed_to_location.values()))
+    seeds = data[0].split(": ")[1].split(" ")
+    return str(find_first_location(seeds, data))
 
 
 def update_values(seeds, seed_to_location, data, first_line_idx):
     for seed in seeds:
-        print(seed)
         for line in data[first_line_idx:]:
             if line == "":
                 break
@@ -47,6 +31,38 @@ def update_values(seeds, seed_to_location, data, first_line_idx):
                 i_val = val + (map_value - key)
                 seed_to_location[seed] = i_val
                 break
+
+
+def find_first_location(seeds, data):
+    location = 0
+    while True:
+        if get_seed_for_location(seeds, location, data):
+            return location
+        location += 1
+
+
+def check_location_in_range(seeds, current_seed) -> bool:
+    for i in range(0, len(seeds), 2):
+        if int(current_seed) in range(int(seeds[i]), int(seeds[i]) + int(seeds[i + 1])):
+            return True
+    return False
+
+
+def get_seed_for_location(seeds, location, data) -> int:
+    l = location
+    for i in range(NUMBER_OF_MAPS - 1, -1, -1):
+        for line in data[START_IDX[i]:]:
+            if line == "":
+                break
+            val, key, r = [int(x) for x in line.split(" ")]
+            dif = location - val
+            if 0 <= dif < r:
+                l = key + dif
+                break
+        location = l
+    if check_location_in_range(seeds, l):
+        return True
+    return False
 
 
 if __name__ == "__main__":
