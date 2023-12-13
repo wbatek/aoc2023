@@ -10,12 +10,9 @@ def part_one(filename: str) -> str:
 def part_two(filename: str) -> str:
     grids = get_data(filename)
     result = 0
-    for i, grid in enumerate(grids):
-        print('grid ', i)
-        top = find_horizontal_p2(grid)
-        left = find_vertical_p2(grid)
-        result += 100 * top
-        result += left
+    for grid in grids:
+        result += 100 * find_horizontal_p2(grid)
+        result += find_vertical_p2(grid)
     return str(result)
 
 
@@ -41,7 +38,6 @@ def find_vertical_p2(grid: list):
                     else:
                         bad += 2
             if bad == 1 and j == len(grid) - 1:
-                print("vert", c1, "result += ", c1 + 1)
                 return c1 + 1
     return result
 
@@ -66,7 +62,6 @@ def find_horizontal_p2(grid: list):
                     else:
                         bad += 2
             if bad == 1 and j == one_side_length - 1:
-                print("horizontal", r1, "result += ", r1 + 1)
                 return r1 + 1
     return result
 
