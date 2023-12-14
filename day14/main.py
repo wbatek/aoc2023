@@ -22,6 +22,7 @@ def part_two(filename: str) -> str:
         cached_values[after_cycle] = count
     return str(calc_result(data))
 
+
 def calc_result(data: list) -> int:
     result = 0
     for i, line in enumerate(data):
@@ -58,11 +59,6 @@ def get_data(filename: str):
         data = file.readlines()
     data = [list(line.strip()) for line in data]
     return data
-
-
-def print_grid(grid: list):
-    for row in grid:
-        print(row)
 
 
 if __name__ == "__main__":
