@@ -25,13 +25,14 @@ def part_two(filename: str) -> str:
 
     return str(result)
 
+
 def count(inputs, numbers):
     if not numbers and all([i in '?.' for i in inputs]):
         return 1
     if (not inputs and numbers) or (inputs and not numbers):
         return 0
 
-    current = (tuple(inputs),tuple(numbers))
+    current = (tuple(inputs), tuple(numbers))
     if current in cached_values.keys():
         return cached_values[current]
 
@@ -45,7 +46,8 @@ def count(inputs, numbers):
                     return result
                 else:
                     result += count(inputs[numbers[0] + 1:], numbers[1:])
-            except IndexError: pass
+            except IndexError:
+                pass
     cached_values[current] = result
     return result
 

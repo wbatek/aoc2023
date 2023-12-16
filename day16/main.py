@@ -31,10 +31,9 @@ def calculate_coverage(data: list, start_beam: Beam) -> int:
         beam_size = len(beams)
         for i in range(beam_size):
             current_beam = beams.pop(0)
-            if (current_beam.x, current_beam.y,
-                current_beam.direction) in already_seen or current_beam.x < 0 or current_beam.x >= len(
-                data[0]) or current_beam.y < 0 or current_beam.y >= len(
-                data):
+            if ((current_beam.x, current_beam.y,
+                current_beam.direction) in already_seen or current_beam.x < 0 or current_beam.x >= len(data[0])
+                    or current_beam.y < 0 or current_beam.y >= len(data)):
                 continue
             already_seen.add((current_beam.x, current_beam.y, current_beam.direction))
             if coverage[current_beam.y][current_beam.x] != '#':
