@@ -34,16 +34,6 @@ def part_two(filename: str) -> str:
     return str(result)
 
 
-def print_loop(grid: list, loop_indices: list):
-    for i in range(len(grid)):
-        for j in range(len(grid[0])):
-            if (i, j) in loop_indices:
-                print(grid[i][j], end='')
-            else:
-                print(' ', end='')
-        print()
-
-
 def get_loop_indices(grid: list, s_index: tuple) -> list:
     loop_indices = [s_index]
     current_index = s_index

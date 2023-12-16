@@ -31,7 +31,6 @@ def part_two(filename: str):
         line = x.readline()
         while line:
             first, last = check(line)
-            print(first, last)
             elem_sum += (10 * int(first) + int(last))
             line = x.readline()
     return str(elem_sum)

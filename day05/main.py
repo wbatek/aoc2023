@@ -67,8 +67,8 @@ def get_seed_for_location(seeds, location, data) -> int:
 
 if __name__ == "__main__":
     input_path = "input.txt"
-    # with open("output1.txt", "w") as f:
-    #     f.write(part_one(input_path))
+    with open("output1.txt", "w") as f:
+        f.write(part_one(input_path))
 
     with open("output2.txt", "w") as f:
         f.write(part_two(input_path))
