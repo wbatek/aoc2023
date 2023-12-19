@@ -1,4 +1,5 @@
 import re
+from collections import deque
 
 COLUMNS = {
     'x': 0,
@@ -45,18 +46,92 @@ def calculate(rules, parts):
             result += sum([int(p) for p in part])
     return str(result)
 
+
 def part_two(filename: str) -> str:
     rules, _ = get_data(filename)
-    ranges = {key: (1, 4000) for key in COLUMNS.keys()}
+    queue = deque([('in', {
+        'x': (1, 4000),
+        'm': (1, 4000),
+        'a': (1, 4000),
+        's': (1, 4000)}
+                    )])
+    result = 0
 
-def count(ranges, next_step='in'):
-    if next_step == 'R':
-        return 0
-    if next_step == 'A':
-        product = 1
-        for left, right in ranges.values():
-            product *= right - left + 1
-        return product
+    while queue:
+        i = 0
+        current_rule, d = queue.pop()
+
+        rule = rules[current_rule][i]
+        while rule != 'A' and rule != 'R':
+            if '<' not in rule and '>' not in rule:
+                queue.append((rule, d))
+                break
+            sign = '>' if '>' in rule else '<'
+            to_compare = int(rule[rule.index(sign) + 1:rule.index(':')])
+            type_of_column = rule[0]
+            if sign == '<':
+                if d[type_of_column][0] < to_compare:
+                    new_d = create_dict(d, type_of_column,
+                                        (d[type_of_column][0], min(to_compare - 1, d[type_of_column][1])))
+                    if rule[rule.index(':') + 1:] == 'A':
+                        result += ((new_d['x'][1] - new_d['x'][0] + 1) *
+                                   (new_d['m'][1] - new_d['m'][0] + 1) *
+                                   (new_d['a'][1] - new_d['a'][0] + 1) *
+                                   (new_d['s'][1] - new_d['s'][0] + 1))
+
+                    elif rule[rule.index(':') + 1:] == 'R':
+                        pass
+
+                    else:
+                        queue.append((rule[rule.index(':') + 1:], new_d))
+
+                    if d[type_of_column][1] > to_compare:
+                        d = create_dict(d, type_of_column, (to_compare, d[type_of_column][1]))
+                        i += 1
+                        rule = rules[current_rule][i]
+                    else:
+                        i = 0
+                else:
+                    i += 1
+                    d = create_dict(d, type_of_column, (to_compare, d[type_of_column][1]))
+                    rule = rules[current_rule][i]
+            else:
+                if d[type_of_column][1] > to_compare:
+                    new_d = create_dict(d, type_of_column,
+                                        (max(to_compare + 1, d[type_of_column][0]), d[type_of_column][1]))
+                    if rule[rule.index(':') + 1:] == 'A':
+                        result += ((new_d['x'][1] - new_d['x'][0] + 1) *
+                                   (new_d['m'][1] - new_d['m'][0] + 1) *
+                                   (new_d['a'][1] - new_d['a'][0] + 1) *
+                                   (new_d['s'][1] - new_d['s'][0] + 1))
+                    elif rule[rule.index(':') + 1:] == 'R':
+                        pass
+                    else:
+                        queue.append((rule[rule.index(':') + 1:], new_d))
+
+                    if d[type_of_column][0] < to_compare:
+                        d = create_dict(d, type_of_column, (d[type_of_column][0], to_compare))
+                        i += 1
+                        rule = rules[current_rule][i]
+                    else:
+                        i = 0
+                else:
+                    i += 1
+                    d = create_dict(d, type_of_column, (d[type_of_column][0], to_compare))
+                    rule = rules[current_rule][i]
+
+        if rule == 'A':
+            result += ((d['x'][1] - d['x'][0] + 1) *
+                       (d['m'][1] - d['m'][0] + 1) *
+                       (d['a'][1] - d['a'][0] + 1) *
+                       (d['s'][1] - d['s'][0] + 1))
+    return str(result)
+
+
+def create_dict(d, key, value):
+    x = dict(d)
+    x[key] = value
+    return x
 
 
 def get_data(filename: str) -> tuple:
@@ -81,5 +156,5 @@ if __name__ == "__main__":
     with open("output1.txt", "w") as f:
         f.write(part_one(input_path))
 
-    # with open("output2.txt", "w") as f:
-    #     f.write(part_two(input_path))
+    with open("output2.txt", "w") as f:
+        f.write(part_two(input_path))
