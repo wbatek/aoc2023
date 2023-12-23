@@ -147,8 +147,8 @@ def get_data(filename):
 
 if __name__ == "__main__":
     input_path = "input.txt"
-    # with open("output1.txt", "w") as f:
-    #     f.write(part_one(input_path))
+    with open("output1.txt", "w") as f:
+        f.write(part_one(input_path))
 
     with open("output2.txt", "w") as f:
         f.write(part_two(input_path))
