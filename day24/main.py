@@ -1,3 +1,5 @@
+import sympy
+
 def part_one(filename: str) -> str:
     hailstones = get_data(filename)
     result = 0
@@ -20,6 +22,22 @@ def part_one(filename: str) -> str:
                 if (xr - x1) * vx1 >= 0 and (yr - y1) * vy1 >= 0 and (xr - x2) * vx2 >= 0 and (yr - y2) * vy2 >= 0:
                     result += 1
     return str(result)
+
+def part_two(filename: str) -> str:
+    hailstones = get_data(filename)
+    xr, yr, zr, vxr, vyr, vzr = sympy.symbols("xr, yr, zr, vxr, vyr, vzr")
+    equations = []
+
+    for i in range(len(hailstones)):
+        x, y, z, vx, vy, vz = hailstones[i]
+        equations.append((xr - x) * (vy - vyr) - (yr - y) * (vx - vxr))
+        equations.append((yr - y) * (vz - vzr) - (zr - z) * (vy - vyr))
+        if i < 2:
+            continue
+        answers = [sol for sol in sympy.solve(equations) if all(x % 1 == 0 for x in sol.values())]
+        if len(answers) == 1:
+           ans = answers[0]
+           return str(int(ans[xr]) + int(ans[yr]) + int(ans[zr]))
 
 
 def get_data(filename: str) -> list:
